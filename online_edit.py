@@ -7,7 +7,7 @@ from operator import itemgetter
 from config_env import embedding_endpoint, llm_endpoint, AZURE_OPENAI_VERSION, api_key
 from langchain.schema import Document
 from langchain.globals import set_verbose, get_verbose
-from language_detection import detect_language
+# from langdetect import detect_langs  # Updated import statement
 
 # Set verbose mode
 set_verbose(True)
@@ -116,17 +116,12 @@ RESPONSES = {
 
 # Language detection function
 def detect_language(text):
-    language_detection_prompt = ChatPromptTemplate.from_template("""
-    Determine the language of the following text:
-    Text: {text}
-    Language:
-    """)
-    
-    manager = TaskManager()
-    language_detection_task = RunnableLambda(lambda x: language_detection_prompt.invoke(x))
-    response = manager.run(language_detection_task, {'text': text})
-    
-    return response.content.strip()
+    # try:
+    #     detected_langs = detect_langs(text)
+    #     return detected_langs[0].lang if detected_langs else "id"
+    # except Exception as e:
+    #     st.error(f"Error detecting language: {e}")
+        return "id"
 
 # Get response in the specified language
 def get_response(key, lang=detected_language):
