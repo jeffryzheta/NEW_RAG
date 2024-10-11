@@ -122,7 +122,7 @@ def detect_language_preference(text):
     return 'id'
 
 # Get response in the specified language
-def get_response(key, lang=detected_lang):
+def get_response(key, lang='id'):
     """Get response in the specified language"""
     return RESPONSES[lang][key]
 
