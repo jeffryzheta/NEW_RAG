@@ -6,7 +6,9 @@ from langchain.prompts import ChatPromptTemplate
 from operator import itemgetter
 from config_env import embedding_endpoint, llm_endpoint, AZURE_OPENAI_VERSION,api_key
 from langchain.schema import Document  # Add this import
+from langchain.globals import set_verbose, get_verbose
 
+set_verbose(True)
 st.set_page_config(page_title="Hypothetical RAG Chatbot", layout="wide")
 
 # Initialize models and vector store
@@ -63,8 +65,8 @@ def create_hypothetical_rag_chain(vectorstore):
 
 def summarize_content(content):
     summary_prompt = ChatPromptTemplate.from_template("""
-    Instruction: "gabungkan semua informasi yang didapat dan kelompokkan
-    tampilkan informasi paling relevan" 
+    Instruction: "combine and group all the information gathered from the documents and summarize it in a clear and concise manner. Ensure to re
+    show relevant content without any redundancy and keep the small detail."  
     {content}
     """)
     
@@ -152,7 +154,7 @@ if prompt := st.chat_input("What would you like to know?"):
                 # Keyword + semantic similarity search
                 similarity_threshold = 0.65  
                 alpha = 0.7 
-                docs = vector_store.similarity_search(prompt, k=7)
+                docs = vector_store.similarity_search(prompt, k=7, similarity_threshold = similarity_threshold, alpha = alpha)
                 
                 summary = summarize_content(docs)
                 full_response = f"{response.content}"
