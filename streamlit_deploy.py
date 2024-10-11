@@ -152,7 +152,7 @@ if prompt := st.chat_input("What would you like to know?"):
                 # Keyword + semantic similarity search
                 similarity_threshold = 0.65  
                 alpha = 0.7 
-                docs = vector_store.similarity_search(prompt, k=10, similarity_threshold=similarity_threshold, alpha= alpha)
+                docs = vector_store.similarity_search(prompt, k=7)
                 
                 summary = summarize_content(docs)
                 full_response = f"{response.content}"
