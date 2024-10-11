@@ -66,7 +66,7 @@ def create_hypothetical_rag_chain(vectorstore):
 def summarize_content(content):
     summary_prompt = ChatPromptTemplate.from_template("""
     Instruction: "Combine and group all the information gathered from the documents and tell the information in a clear and concise manner.
-    Show the most relevant content good details. Add little information that might user want"  
+    Show the most relevant content in good details. Add little information that the user want might"  
     {content}
     """)
     
