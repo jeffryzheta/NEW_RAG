@@ -115,12 +115,11 @@ RESPONSES = {
 }
 
 # Language detection function
-def detect_language(text):
-    # try:
-    #     detected_langs = detect_langs(text)
-    #     return detected_langs[0].lang if detected_langs else "id"
-    # except Exception as e:
-    #     st.error(f"Error detecting language: {e}")
+def detect_language_preference(text):
+    """Simple language detection based on common words"""
+    # For simplicity, we're always returning 'id' here. In a real implementation,
+    # you'd want to implement actual language detection logic.
+    return 'id'rror detecting language: {e}")
         return "id"
 
 # Get response in the specified language
@@ -159,12 +158,9 @@ def handle_user_input():
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
                 try:                      
-                    # Add language detection in Streamlit app
-                    if prompt := st.chat_input("What would you like to know?"):
-                        
                     # Detect language if not already set
                     if not st.session_state.language_set:
-                        detected_lang = detect_language(prompt)
+                        detected_lang = detect_language_preference(prompt)
                         st.session_state.selected_language = detected_lang
                         st.session_state.language_set = True
                     
