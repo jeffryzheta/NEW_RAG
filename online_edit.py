@@ -181,7 +181,7 @@ def handle_user_input():
 
                     # Check for irrelevant questions
                     if "tidak relevan" in response.content.lower() or "not relevant" in response.content.lower():
-                        st.markdown(get_response('irrelevant', lang))
+                        st.markdown(get_response('irrelevant', 'id'))
                     else:
                         st.markdown(full_response)
 
@@ -192,7 +192,7 @@ def handle_user_input():
                     })
 
                 except Exception as e:
-                    st.error(get_response('error', lang))
+                    st.error(get_response('error', 'id'))
                     print(f"Error: {str(e)}")  # For debugging
 
 handle_user_input()
