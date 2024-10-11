@@ -158,19 +158,17 @@ def handle_user_input():
 
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
-                try:
+                try:                      
+                    # Add language detection in Streamlit app
+                    if prompt := st.chat_input("What would you like to know?"):
+                        
                     # Detect language if not already set
                     if not st.session_state.language_set:
                         detected_lang = detect_language(prompt)
                         st.session_state.selected_language = detected_lang
                         st.session_state.language_set = True
-                      
-                    # Add language detection in Streamlit app
-                    if prompt := st.chat_input("What would you like to know?"):
-                        detected_language = detect_language(prompt)
-                        st.write(f"Detected language: {detected_language}")
                     
-                    lang = st.session_state.detected_language
+                    lang = st.session_state.detected_lang
                     
                     # Generate response using RAG
                     response = rag_chain.invoke({
