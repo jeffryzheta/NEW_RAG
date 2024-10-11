@@ -119,7 +119,7 @@ def detect_language_preference(text):
     """Simple language detection based on common words"""
     # For simplicity, we're always returning 'id' here. In a real implementation,
     # you'd want to implement actual language detection logic.
-    return 'id'rror detecting language: {e}")
+    return st.error(f"Error detecting language: {e}")
         return "id"
 
 # Get response in the specified language
