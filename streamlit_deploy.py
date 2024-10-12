@@ -5,8 +5,7 @@ from langchain_core.runnables import RunnableLambda
 from langchain.prompts import ChatPromptTemplate
 from operator import itemgetter
 from config_env import embedding_endpoint, llm_endpoint, AZURE_OPENAI_VERSION,api_key
-from langchain.schema import Document  # Add this import
-from langchain.globals import set_verbose, get_verbose
+from langchain.globals import set_verbose
 
 set_verbose(True)
 st.set_page_config(page_title="Hypothetical RAG Chatbot", layout="wide")
@@ -55,7 +54,8 @@ def create_hypothetical_rag_chain(vectorstore):
     chain = (
         {
             "question": itemgetter("original_question"),
-            "context": lambda x: retriever.invoke(x["question"]),
+            # "context": lambda x: retriever.invoke(x["question"]),
+            "context": lambda x: vectorstore.similarity_search(x["question"], k=15, similarity_threshold = 0.65, alpha = 0.7),
         }
         | response_prompt
         | open_ai_llm
@@ -151,12 +151,11 @@ if prompt := st.chat_input("What would you like to know?"):
                         })
                 
               # Keyword + semantic similarity search
-                similarity_threshold = 0.65  
-                alpha = 0.7 
-                docs = vector_store.similarity_search(prompt, k=10, similarity_threshold = similarity_threshold, alpha = alpha)
+                # similarity_threshold = 0.65  
+                # alpha = 0.7 
+                # docs = vector_store.similarity_search(prompt, k=15, similarity_threshold = similarity_threshold, alpha = alpha)
             
-                
-                summary = summarize_content(docs)
+                # summary = summarize_content(docs)
                 full_response = f"{response.content}"
 
                 # Check for irrelevant questions
