@@ -13,7 +13,7 @@ st.set_page_config(page_title="Hypothetical RAG Chatbot", layout="wide")
 
 # Initialize models and vector store
 embedding_model = AzureOpenAIEmbeddings(azure_endpoint=embedding_endpoint, api_key=api_key)
-vector_store = InMemoryVectorStore(embedding_model).load('docint_vector_store', embedding_model)
+vector_store = InMemoryVectorStore(embedding_model).load('VS-final', embedding_model)
 
 # vector_store_files = ['vector_store_v1', 'vector_store_v2','vector_store','vector_store1','vector_store2']  # Add your file names here
 
@@ -65,14 +65,16 @@ def create_hypothetical_rag_chain(vectorstore):
 
 def summarize_content(content):
     summary_prompt = ChatPromptTemplate.from_template("""
-    Instruction: "Combine and group all the information gathered from the documents and tell the information in a clear and concise manner.
-    Show the most relevant content in good details. Add little information that the user want might"  
+    Instruction: "Combine, summarize, and group all the information gathered from the documents and tell the information in a clear and concise manner.
+    Show the relevant content in good details"  
     {content}
     """)
     
     summary_chain = summary_prompt | open_ai_llm
     summary_response = summary_chain.invoke({"content": content})
     return summary_response.content
+
+
 
 # Predefined responses
 RESPONSES = {
@@ -132,29 +134,27 @@ if prompt := st.chat_input("What would you like to know?"):
     
     with st.chat_message("user"):
         st.markdown(prompt)
-
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            try:
-                # Detect language if not already set
-                if not st.session_state.language_set:
+    if not st.session_state.language_set:
                     detected_lang = detect_language_preference(prompt)
                     st.session_state.selected_language = detected_lang
                     st.session_state.language_set = True
                 
-                lang = st.session_state.selected_language
-                
+    lang = st.session_state.selected_language
+
+    with st.chat_message("assistant"):
+        with st.spinner("Thinking..."):
+            try:
                 # Generate response using RAG
                 response = rag_chain.invoke({
-                    "question": prompt,
-                    "original_question": prompt
-                })
-
-               
-                # Keyword + semantic similarity search
+                        "question": prompt,
+                        "original_question": prompt
+                        })
+                
+              # Keyword + semantic similarity search
                 similarity_threshold = 0.65  
                 alpha = 0.7 
-                docs = vector_store.similarity_search(prompt, k=7, similarity_threshold = similarity_threshold, alpha = alpha)
+                docs = vector_store.similarity_search(prompt, k=10, similarity_threshold = similarity_threshold, alpha = alpha)
+            
                 
                 summary = summarize_content(docs)
                 full_response = f"{response.content}"
