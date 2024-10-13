@@ -45,12 +45,11 @@ Question: {question}
 
 
 def create_hypothetical_rag_chain(vectorstore):
-    def retrieve_docs(query: str) -> str:
-        docs = vectorstore.similarity_search(query, k=3)
-        return summarize_content("\n\n".join(doc.page_content for doc in docs))
+    # def retrieve_docs(query: str) -> str:
+    #     docs = vectorstore.similarity_search(query, k=3)
+    #     return summarize_content("\n\n".join(doc.page_content for doc in docs))
 
-    retriever = RunnableLambda(retrieve_docs)
-
+    # retriever = RunnableLambda(retrieve_docs)
     chain = (
         {
             "question": itemgetter("original_question"),
@@ -63,16 +62,16 @@ def create_hypothetical_rag_chain(vectorstore):
     
     return chain
 
-def summarize_content(content):
-    summary_prompt = ChatPromptTemplate.from_template("""
-    Instruction: "Combine, summarize, and group all the information gathered from the documents and tell the information in a clear and concise manner.
-    Show the relevant content in good details"  
-    {content}
-    """)
+# def summarize_content(content):
+#     summary_prompt = ChatPromptTemplate.from_template("""
+#     Instruction: "Combine, summarize, and group all the information gathered from the documents and tell the information in a clear and concise manner.
+#     Show the relevant content in good details"  
+#     {content}
+#     """)
     
-    summary_chain = summary_prompt | open_ai_llm
-    summary_response = summary_chain.invoke({"content": content})
-    return summary_response.content
+#     summary_chain = summary_prompt | open_ai_llm
+#     summary_response = summary_chain.invoke({"content": content})
+#     return summary_response.content
 
 
 
